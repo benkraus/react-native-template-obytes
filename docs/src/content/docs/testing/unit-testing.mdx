@@ -1,6 +1,6 @@
 ---
 title: Unit Tests
-description: How to write unit tests using Jest and React Native Testing Library
+description: How to write unit tests using Vitest and React Native Testing Library
 head:
   - tag: title
     content: Unit Tests | React Native / Expo Starter
@@ -8,9 +8,9 @@ head:
 
 import CodeBlock from '../../../components/code.astro';
 
-As we mention in the overview page of the testing section, we include the [Jest](https://jestjs.io/) testing framework and the [React Native Testing Library](https://callstack.github.io/react-native-testing-library/) for unit tests, along with mocks for most libraries.
+As we mention in the overview page of the testing section, we include the [Vitest](https://vitest.dev/) testing framework and [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) for unit tests, along with mocks for most libraries.
 
-The following guide is not a tutorial on how to write tests using React Native Testing Library and Jest, but rather a guide on how to write tests with this starter and some best practices to follow. If you are not familiar with testing, we recommend reading the [official documentation](https://jestjs.io/docs/en/getting-started) of Jest and [React Native Testing Library](https://callstack.github.io/react-native-testing-library/) to get familiar with them.
+The following guide is not a tutorial on how to write tests using Testing Library and Vitest, but rather a guide on how to write tests with this starter and some best practices to follow. If you are not familiar with testing, we recommend reading the [official documentation](https://vitest.dev/guide/) of Vitest and [Testing Library](https://testing-library.com/docs/react-testing-library/intro/) to get familiar with them.
 
 Also worth mentioning that we should aim to test the following:
 
@@ -72,7 +72,7 @@ Aiming for 100% test coverage is not always a good idea and doesn't always make 
 
 ## More tests
 
-For more complex logic and components, we recommend taking a look at this amazing project which provides a lot of examples and best practices for testing React Native apps using React Native Testing Library and Jest:
+For more complex logic and components, we recommend taking a look at this amazing project which provides a lot of examples and best practices for testing React Native apps using React Native Testing Library:
 
 [⚡️ React Native Testing](https://github.com/vanGalilea/react-native-testing/)
 

@@ -41,7 +41,7 @@ A simple npm script that run np package that helps us to manage the version of t
 ```json
 {
   "scripts": {
-    "app-release": "cross-env SKIP_BRANCH_PROTECTION=true np --no-publish --no-cleanup --no-release-draft",
+    "app-release": "np --no-publish --no-cleanup --no-release-draft",
     "version": "pnpm run prebuild && git add ."
   }
 }

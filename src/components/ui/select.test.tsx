@@ -1,4 +1,4 @@
-import type { OptionType } from '@/components/ui';
+import type { OptionType } from './select';
 
 import * as React from 'react';
 import { cleanup, render, screen, setup } from '@/lib/test-utils';
@@ -14,7 +14,7 @@ describe('select component ', () => {
     { value: 'vanilla', label: 'Vanilla' },
   ];
   it('should render correctly ', () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(
       <Select
         label="Select options"
@@ -23,12 +23,12 @@ describe('select component ', () => {
         testID="select"
       />,
     );
-    expect(screen.getByTestId('select-trigger')).toBeOnTheScreen();
-    expect(screen.getByTestId('select-label')).toBeOnTheScreen();
+    expect(screen.getByTestId('select-trigger')).toBeInTheDocument();
+    expect(screen.getByTestId('select-label')).toBeInTheDocument();
   });
 
   it('should render the label correctly ', () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(
       <Select
         label="Select"
@@ -37,13 +37,13 @@ describe('select component ', () => {
         testID="select"
       />,
     );
-    expect(screen.getByTestId('select-trigger')).toBeOnTheScreen();
-    expect(screen.getByTestId('select-label')).toBeOnTheScreen();
+    expect(screen.getByTestId('select-trigger')).toBeInTheDocument();
+    expect(screen.getByTestId('select-label')).toBeInTheDocument();
     expect(screen.getByTestId('select-label')).toHaveTextContent('Select');
   });
 
   it('should render the error correctly ', () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     render(
       <Select
         label="Select"
@@ -53,8 +53,8 @@ describe('select component ', () => {
         error="Please select an option"
       />,
     );
-    expect(screen.getByTestId('select-trigger')).toBeOnTheScreen();
-    expect(screen.getByTestId('select-error')).toBeOnTheScreen();
+    expect(screen.getByTestId('select-trigger')).toBeInTheDocument();
+    expect(screen.getByTestId('select-error')).toBeInTheDocument();
     expect(screen.getByTestId('select-error')).toHaveTextContent(
       'Please select an option',
     );
@@ -71,28 +71,25 @@ describe('select component ', () => {
     );
 
     const selectTrigger = screen.getByTestId('select-trigger');
-    await user.press(selectTrigger);
+    await user.click(selectTrigger);
 
-    expect(screen.getByTestId('select-item-chocolate')).toBeOnTheScreen();
-    expect(screen.getByTestId('select-item-strawberry')).toBeOnTheScreen();
-    expect(screen.getByTestId('select-item-vanilla')).toBeOnTheScreen();
+    expect(screen.getByTestId('select-item-chocolate')).toBeInTheDocument();
+    expect(screen.getByTestId('select-item-strawberry')).toBeInTheDocument();
+    expect(screen.getByTestId('select-item-vanilla')).toBeInTheDocument();
   });
 
   it('should call onSelect on selecting an option', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
 
     const { user } = setup(
       <Select options={options} onSelect={onSelect} testID="select" />,
     );
 
     const selectTrigger = screen.getByTestId('select-trigger');
-    await user.press(selectTrigger);
-
-    const optionModal = screen.getByTestId('select-modal');
-    await user.press(optionModal);
+    await user.click(selectTrigger);
 
     const optionItem1 = screen.getByTestId('select-item-chocolate');
-    await user.press(optionItem1);
+    await user.click(optionItem1);
 
     expect(onSelect).toHaveBeenCalledWith(options[0].value);
   });

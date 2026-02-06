@@ -1,136 +1,119 @@
-/* eslint-disable better-tailwindcss/no-unknown-classes */
-import type { PressableProps, View } from 'react-native';
-import type { VariantProps } from 'tailwind-variants';
+import type { PressableProps } from 'react-native';
+import { Button as HeroButton } from 'heroui-native/button';
 import * as React from 'react';
-import { ActivityIndicator, Pressable, Text } from 'react-native';
-import { tv } from 'tailwind-variants';
+import { ActivityIndicator, View } from 'react-native';
+import { twMerge } from 'tailwind-merge';
 
-const button = tv({
-  slots: {
-    container: 'my-2 flex flex-row items-center justify-center rounded-md px-4',
-    label: 'font-inter text-base font-semibold',
-    indicator: 'h-6 text-white',
-  },
+export type ButtonVariant
+  = | 'default'
+    | 'secondary'
+    | 'outline'
+    | 'destructive'
+    | 'ghost'
+    | 'link';
 
-  variants: {
-    variant: {
-      default: {
-        container: 'bg-black dark:bg-white',
-        label: 'text-white dark:text-black',
-        indicator: 'text-white dark:text-black',
-      },
-      secondary: {
-        container: 'bg-primary-600',
-        label: 'text-secondary-600',
-        indicator: 'text-white',
-      },
-      outline: {
-        container: 'border border-neutral-400',
-        label: 'text-black dark:text-neutral-100',
-        indicator: 'text-black dark:text-neutral-100',
-      },
-      destructive: {
-        container: 'bg-red-600',
-        label: 'text-white',
-        indicator: 'text-white',
-      },
-      ghost: {
-        container: 'bg-transparent',
-        label: 'text-black underline dark:text-white',
-        indicator: 'text-black dark:text-white',
-      },
-      link: {
-        container: 'bg-transparent',
-        label: 'text-black',
-        indicator: 'text-black',
-      },
-    },
-    size: {
-      default: {
-        container: 'h-10 px-4',
-        label: 'text-base',
-      },
-      lg: {
-        container: 'h-12 px-8',
-        label: 'text-xl',
-      },
-      sm: {
-        container: 'h-8 px-3',
-        label: 'text-sm',
-        indicator: 'h-2',
-      },
-      icon: { container: 'size-9' },
-    },
-    disabled: {
-      true: {
-        container: 'bg-neutral-300 dark:bg-neutral-300',
-        label: 'text-neutral-600 dark:text-neutral-600',
-        indicator: 'text-neutral-400 dark:text-neutral-400',
-      },
-    },
-    fullWidth: {
-      true: {
-        container: '',
-      },
-      false: {
-        container: 'self-center',
-      },
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    disabled: false,
-    fullWidth: true,
-    size: 'default',
-  },
-});
+export type ButtonSize = 'default' | 'lg' | 'sm' | 'icon';
 
-type ButtonVariants = VariantProps<typeof button>;
 type Props = {
   label?: string;
   loading?: boolean;
   className?: string;
   textClassName?: string;
-} & ButtonVariants & Omit<PressableProps, 'disabled'>;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  disabled?: boolean;
+  fullWidth?: boolean;
+  children?: React.ReactNode;
+} & Omit<PressableProps, 'disabled' | 'children'>;
 
-export function Button({ ref, label: text, loading = false, variant = 'default', disabled = false, size = 'default', className = '', testID, textClassName = '', ...props }: Props & { ref?: React.RefObject<View | null> }) {
-  const styles = React.useMemo(
-    () => button({ variant, disabled, size }),
-    [variant, disabled, size],
+function mapVariant(variant: ButtonVariant): React.ComponentProps<typeof HeroButton>['variant'] {
+  switch (variant) {
+    case 'default':
+      return 'primary';
+    case 'secondary':
+      return 'secondary';
+    case 'outline':
+      return 'outline';
+    case 'destructive':
+      return 'danger';
+    case 'ghost':
+      return 'ghost';
+    case 'link':
+      return 'tertiary';
+    default:
+      return 'primary';
+  }
+}
+
+function mapSize(size: ButtonSize): React.ComponentProps<typeof HeroButton>['size'] {
+  switch (size) {
+    case 'sm':
+      return 'sm';
+    case 'lg':
+      return 'lg';
+    case 'icon':
+      return 'md';
+    case 'default':
+    default:
+      return 'md';
+  }
+}
+
+export function Button({
+  label,
+  loading = false,
+  variant = 'default',
+  disabled = false,
+  size = 'default',
+  fullWidth = true,
+  className = '',
+  textClassName = '',
+  testID,
+  children,
+  ...props
+}: Props) {
+  const isDisabled = disabled || loading;
+
+  const rootClassName = React.useMemo(
+    () =>
+      twMerge(
+        fullWidth ? 'w-full' : 'self-center',
+        // "link" is a semantics-only variant in our wrapper; underline the label by default.
+        variant === 'link' ? 'px-0' : '',
+        className,
+      ),
+    [className, fullWidth, variant],
   );
 
   return (
-    <Pressable
-      disabled={disabled || loading}
-      className={styles.container({ className })}
-      {...props}
-      ref={ref}
+    <HeroButton
       testID={testID}
+      isDisabled={isDisabled}
+      isIconOnly={size === 'icon'}
+      size={mapSize(size)}
+      variant={mapVariant(variant)}
+      className={rootClassName}
+      {...props}
     >
-      {props.children
-        ? (
-            props.children
-          )
-        : (
-            <>
-              {loading
-                ? (
-                    <ActivityIndicator
-                      size="small"
-                      className={styles.indicator()}
-                      testID={testID ? `${testID}-activity-indicator` : undefined}
-                    />
-                  )
-                : (
-                    <Text
-                      testID={testID ? `${testID}-label` : undefined}
-                      className={styles.label({ className: textClassName })}
-                    >
-                      {text}
-                    </Text>
-                  )}
-            </>
-          )}
-    </Pressable>
+      {children ?? (
+        <View className="flex-row items-center justify-center gap-2">
+          {loading
+            ? (
+                <ActivityIndicator
+                  testID={testID ? `${testID}-activity-indicator` : undefined}
+                />
+              )
+            : null}
+          <HeroButton.Label
+            className={twMerge(
+              variant === 'link' ? 'underline' : '',
+              textClassName,
+            )}
+          >
+            {label ?? ''}
+          </HeroButton.Label>
+        </View>
+      )}
+    </HeroButton>
   );
 }

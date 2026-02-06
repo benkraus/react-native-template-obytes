@@ -1,11 +1,14 @@
 import { useForm } from '@tanstack/react-form';
 
 import * as React from 'react';
+import { View } from 'react-native';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import * as z from 'zod';
 
-import { Button, Input, Text, View } from '@/components/ui';
+import { Button } from '@/components/ui/button';
 import { getFieldError } from '@/components/ui/form-utils';
+import { Input } from '@/components/ui/input';
+import { Text } from '@/components/ui/text';
 
 const schema = z.object({
   name: z.string().optional(),

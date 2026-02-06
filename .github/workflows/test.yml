@@ -10,7 +10,7 @@
 
 # 🚨 GITHUB SECRETS REQUIRED: NONE
 
-name: Tests (jest)
+name: Tests (vitest)
 
 on:
   push:
@@ -20,7 +20,7 @@ on:
 
 jobs:
   test:
-    name: Tests (jest)
+    name: Tests (vitest)
     runs-on: ubuntu-latest
 
     steps:
@@ -34,17 +34,3 @@ jobs:
 
       - name: 🏃‍♂️ Run Tests
         run: pnpm run test:ci
-
-      - name: Jest Coverage Comment
-        uses: MishaKav/jest-coverage-comment@main
-        if: (success() || failure()) && github.event_name == 'pull_request'
-        with:
-          coverage-summary-path: ./coverage/coverage-summary.json
-          summary-title: 💯 Test Coverage
-          badge-title: Coverage
-          create-new-comment: false
-          junitxml-title: 😎 Tests Results
-          junitxml-path: ./coverage/jest-junit.xml
-          coverage-title: 👀 Tests Details
-          coverage-path: ./coverage/coverage.txt
-          report-only-changed-files: true

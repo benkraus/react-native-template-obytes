@@ -1,18 +1,29 @@
 /* eslint-disable react-refresh/only-export-components */
-import type { RenderOptions } from '@testing-library/react-native';
+import type { RenderOptions } from '@testing-library/react';
 
 import type { ReactElement } from 'react';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { NavigationContainer } from '@react-navigation/native';
-import { render, userEvent } from '@testing-library/react-native';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { HeroUINativeProvider } from 'heroui-native/provider';
 import * as React from 'react';
-import '@shopify/flash-list/jestSetup';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+const heroConfig = {
+  devInfo: { stylingPrinciples: false },
+  toast: false,
+} as const;
 
 function createAppWrapper() {
   return ({ children }: { children: React.ReactNode }) => (
-    <BottomSheetModalProvider>
-      <NavigationContainer>{children}</NavigationContainer>
-    </BottomSheetModalProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <HeroUINativeProvider config={heroConfig}>
+        <BottomSheetModalProvider>
+          <NavigationContainer>{children}</NavigationContainer>
+        </BottomSheetModalProvider>
+      </HeroUINativeProvider>
+    </GestureHandlerRootView>
   );
 }
 
@@ -30,5 +41,5 @@ export function setup(ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>
   };
 }
 
-export * from '@testing-library/react-native';
+export * from '@testing-library/react';
 export { customRender as render };

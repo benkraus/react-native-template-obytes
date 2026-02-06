@@ -2,6 +2,12 @@
 @import 'tailwindcss';
 @import 'uniwind';
 
+/* HeroUI Native styles (components + theme tokens) */
+@import 'heroui-native/styles';
+
+/* Path is relative to this file (src/global.css) */
+@source '../node_modules/heroui-native/lib';
+
 /* Define your theme in CSS (replaces tailwind.config.js) */
 @theme {
   /* Font families */

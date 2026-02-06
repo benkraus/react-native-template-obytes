@@ -1,8 +1,6 @@
-import type { OptionType } from '@/components/ui';
-
 import type { ColorSchemeType } from '@/lib/hooks/use-selected-theme';
+import { Select } from 'heroui-native/select';
 import * as React from 'react';
-import { Options, useModal } from '@/components/ui';
 import { useSelectedTheme } from '@/lib/hooks/use-selected-theme';
 import { translate } from '@/lib/i18n';
 
@@ -10,15 +8,6 @@ import { SettingsItem } from './settings-item';
 
 export function ThemeItem() {
   const { selectedTheme, setSelectedTheme } = useSelectedTheme();
-  const modal = useModal();
-
-  const onSelect = React.useCallback(
-    (option: OptionType) => {
-      setSelectedTheme(option.value as ColorSchemeType);
-      modal.dismiss();
-    },
-    [setSelectedTheme, modal],
-  );
 
   const themes = React.useMemo(
     () => [
@@ -35,18 +24,26 @@ export function ThemeItem() {
   );
 
   return (
-    <>
-      <SettingsItem
-        text="settings.theme.title"
-        value={theme?.label}
-        onPress={modal.present}
-      />
-      <Options
-        ref={modal.ref}
-        options={themes}
-        onSelect={onSelect}
-        value={theme?.value}
-      />
-    </>
+    <Select
+      value={theme}
+      onValueChange={(opt: any) => opt && setSelectedTheme(opt.value as ColorSchemeType)}
+      presentation="bottom-sheet"
+    >
+      <Select.Trigger asChild>
+        <SettingsItem text="settings.theme.title" value={theme?.label} />
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Overlay />
+        <Select.Content presentation="bottom-sheet" snapPoints={['35%']}>
+          {themes.map(t => (
+            <Select.Item
+              key={`theme-${t.value}`}
+              value={t.value}
+              label={t.label}
+            />
+          ))}
+        </Select.Content>
+      </Select.Portal>
+    </Select>
   );
 }

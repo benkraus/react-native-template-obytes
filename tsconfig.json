@@ -13,9 +13,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "**/*.d.ts",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts",
+    "uniwind-types.d.ts",
     "env.ts"
   ],
   "exclude": [

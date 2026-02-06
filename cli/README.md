@@ -46,7 +46,7 @@ When creating this starter kit, we had several guiding principles in mind::
 
 - ✅ The latest version of Expo SDK, along with the Custom Dev client, to give you access to a range of powerful features and tools.
 - 🎉 [TypeScript](https://www.typescriptlang.org/) for type checking, to help you catch bugs and improve code quality.
-- 💅 A minimal UI kit built with [tailwindcss](https://www.nativewind.dev/), which provides a range of pre-defined classes for styling your app.
+- 💅 UI components powered by [HeroUI Native](https://github.com/heroui-inc/heroui-native) and Tailwind CSS via [Uniwind](https://github.com/huozhi/uniwind).
 - ⚙️ Support for multiple environment builds, including Production, Staging, and Development, using Expo configuration.
 - 🦊 Husky for Git Hooks, to automate your git hooks and enforce code standards.
 - 💡 A clean project structure with Absolute Imports, to make it easier to navigate and manage your code.
@@ -103,7 +103,8 @@ We value the feedback and contributions of our users, and we encourage you to le
 
 - [Expo](https://docs.expo.io/)
 - [Expo Router](https://docs.expo.dev/router/introduction/)
-- [Nativewind](https://www.nativewind.dev/)
+- [HeroUI Native](https://github.com/heroui-inc/heroui-native)
+- [Uniwind](https://github.com/huozhi/uniwind)
 - [Flash list](https://github.com/Shopify/flash-list)
 - [React Query](https://tanstack.com/query/v4)
 - [Axios](https://axios-http.com/docs/intro)

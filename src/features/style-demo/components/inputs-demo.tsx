@@ -1,7 +1,7 @@
 import type { OptionType } from '@/components/ui';
 
 import * as React from 'react';
-import { Checkbox, Input, Radio, Select, Switch, View } from '@/components/ui';
+import { Checkbox, Input, RadioGroup, Select, Switch, Text, View } from '@/components/ui';
 
 import { Title } from './title';
 
@@ -37,44 +37,37 @@ export function Inputs() {
 function CheckboxExample() {
   const [checked, setChecked] = React.useState(false);
   return (
-    <Checkbox.Root
-      checked={checked}
-      onChange={setChecked}
-      accessibilityLabel="accept terms of condition"
-      className="pb-2"
-    >
-      <Checkbox.Icon checked={checked} />
-      <Checkbox.Label text="checkbox" />
-    </Checkbox.Root>
+    <View className="flex-row items-center gap-2 pb-2">
+      <Checkbox
+        accessibilityLabel="accept terms of condition"
+        isSelected={checked}
+        onSelectedChange={setChecked}
+      />
+      <Text>checkbox</Text>
+    </View>
   );
 }
 
 function RadioExample() {
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = React.useState<'on' | 'off'>('off');
   return (
-    <Radio.Root
-      checked={selected}
-      onChange={setSelected}
-      accessibilityLabel="radio button"
-      className="pb-2"
-    >
-      <Radio.Icon checked={selected} />
-      <Radio.Label text="radio button" />
-    </Radio.Root>
+    <RadioGroup value={selected} onValueChange={v => setSelected(v as any)} className="pb-2">
+      <RadioGroup.Item value="off">Off</RadioGroup.Item>
+      <RadioGroup.Item value="on">On</RadioGroup.Item>
+    </RadioGroup>
   );
 }
 
 function SwitchExample() {
   const [active, setActive] = React.useState(false);
   return (
-    <Switch.Root
-      checked={active}
-      onChange={setActive}
-      accessibilityLabel="switch"
-      className="pb-2"
-    >
-      <Switch.Icon checked={active} />
-      <Switch.Label text="switch" />
-    </Switch.Root>
+    <View className="flex-row items-center gap-2 pb-2">
+      <Switch
+        accessibilityLabel="switch"
+        isSelected={active}
+        onSelectedChange={setActive}
+      />
+      <Text>switch</Text>
+    </View>
   );
 }

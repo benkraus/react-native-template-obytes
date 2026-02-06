@@ -1,28 +1,27 @@
-import type { LoginFormProps } from './login-form';
-
 import * as React from 'react';
 
-import { cleanup, screen, setup, waitFor } from '@/lib/test-utils';
+import { cleanup, fireEvent, screen, setup, waitFor } from '@/lib/test-utils';
 import { LoginForm } from './login-form';
 
 afterEach(cleanup);
 
-const onSubmitMock: jest.Mock<LoginFormProps['onSubmit']> = jest.fn();
+// Vitest's mock functions are callable and work as event handlers.
+const onSubmitMock = vi.fn();
 
 describe('loginForm Form ', () => {
   it('renders correctly', async () => {
     setup(<LoginForm />);
-    expect(await screen.findByTestId('form-title')).toBeOnTheScreen();
+    expect(await screen.findByTestId('form-title')).toBeInTheDocument();
   });
 
   it('should display required error when values are empty', async () => {
     const { user } = setup(<LoginForm />);
 
     const button = screen.getByTestId('login-button');
-    expect(screen.queryByText(/Email is required/i)).not.toBeOnTheScreen();
-    await user.press(button);
-    expect(await screen.findByText(/Email is required/i)).toBeOnTheScreen();
-    expect(screen.getByText(/Password is required/i)).toBeOnTheScreen();
+    expect(screen.queryByText(/Email is required/i)).not.toBeInTheDocument();
+    await user.click(button);
+    expect(await screen.findByText(/Email is required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Password is required/i)).toBeInTheDocument();
   });
 
   it('should display matching error when email is invalid', async () => {
@@ -33,12 +32,12 @@ describe('loginForm Form ', () => {
     const passwordInput = screen.getByTestId('password-input');
 
     await user.type(emailInput, 'yyyyy');
-    emailInput.props.onBlur(); // Manually trigger blur to set touched state
+    fireEvent.blur(emailInput); // Manually trigger blur to set touched state
     await user.type(passwordInput, 'test');
-    await user.press(button);
+    await user.click(button);
 
-    expect(await screen.findByText(/Invalid Email Format/i)).toBeOnTheScreen();
-    expect(screen.queryByText(/Email is required/i)).not.toBeOnTheScreen();
+    expect(await screen.findByText(/Invalid Email Format/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Email is required/i)).not.toBeInTheDocument();
   });
 
   it('should call LoginForm with correct values when values are valid', async () => {
@@ -50,7 +49,7 @@ describe('loginForm Form ', () => {
 
     await user.type(emailInput, 'youssef@gmail.com');
     await user.type(passwordInput, 'password');
-    await user.press(button);
+    await user.click(button);
     await waitFor(() => {
       expect(onSubmitMock).toHaveBeenCalledTimes(1);
     });
